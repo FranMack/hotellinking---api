@@ -2,6 +2,7 @@ import express from "express";
 import morgan from "morgan";
 import { Router } from "express";
 import fileUpload from "express-fileupload"
+import cors from "cors";
 
 
 
@@ -29,6 +30,12 @@ export class Server {
     this.app.use(express.json()); // raw
     this.app.use(express.urlencoded({ extended: true })); // x-www-form-urlencoded
     this.app.use(morgan("tiny"));
+    this.app.use(
+      cors({
+        origin: "http://localhost:5173", // URL del frontend
+        credentials: true, // Habilita el envio de cookies
+      })
+    );
     this.app.use(fileUpload({
       limits: { fileSize: 50 * 1024 * 1024 },
     }));
