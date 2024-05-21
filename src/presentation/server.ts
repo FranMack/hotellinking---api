@@ -32,7 +32,7 @@ export class Server {
     this.app.use(morgan("tiny"));
     this.app.use(
       cors({
-        origin: "http://localhost:5173", // URL del frontend
+        origin: "http://localhost:4000", // URL del frontend
         credentials: true, // Habilita el envio de cookies
       })
     );

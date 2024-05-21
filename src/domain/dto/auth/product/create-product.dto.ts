@@ -1,34 +1,36 @@
-
 export class CreateProductDto {
-    private constructor(
+  private constructor(
       public readonly name: string,
       public readonly available: boolean,
-      public readonly price:number,
-      public readonly description:string,
-      
+      public readonly price: number,
+      public readonly discount: number,
+      public readonly description: string,
+  ) {}
 
-    ) {}
-  
-    static create(object:{[key:string]:any}):[string?,CreateProductDto?]{
-      const {name,available=false,price,description}=object;
-      let availableBoolean=available
-  
-      if(!name){
-          return ["Missing name",undefined]
+  static create(object: { [key: string]: any }): [string?, CreateProductDto?] {
+      const { name, available = false, price, discount, description } = object;
+      let availableBoolean = available;
+
+      if (!name) {
+          return ["Falta el nombre", undefined];
       }
 
-      if(!price){
-        return ["Missing price",undefined]
-    }
-    if(!description){
-        return ["Missing description",undefined]
-    }
-
-      if(typeof available !== "boolean"){
-          availableBoolean=true
+      if (!price) {
+          return ["Falta el precio", undefined];
       }
 
-      return [undefined,new CreateProductDto(name,availableBoolean,price,description,)]
+      if (!discount) {
+          return ["Falta el descuento", undefined];
+      }
+
+      if (!description) {
+          return ["Falta la descripción", undefined];
+      }
+
+      if (typeof available !== "boolean") {
+          availableBoolean = true;
+      }
+
+      return [undefined, new CreateProductDto(name, availableBoolean, price, discount, description)];
   }
-  }
-  
+}

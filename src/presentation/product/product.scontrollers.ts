@@ -32,14 +32,14 @@ export class ProductControllers {
     }
   };
 
-  editProduct = (error: unknown, res: Response) => {
+  editProduct = (req: Request, res: Response)  => {
     res.json("Product edited");
   };
-  deleteProduct = (error: unknown, res: Response) => {
+  deleteProduct = (req: Request, res: Response)  => {
     res.json("Product deleted");
   };
 
-  listProducts = async (error: unknown, res: Response) => {
+  listProducts = async (req: Request, res: Response)  => {
     try {
       const products = await this.productService.listProducts();
       res.status(200).json(products);
@@ -51,4 +51,8 @@ export class ProductControllers {
       return res.status(500).json({ error: "Internal server error" });
     }
   };
+
+
+
+
 }

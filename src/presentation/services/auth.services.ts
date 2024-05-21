@@ -52,11 +52,11 @@ export class AuthServices {
       });
 
       if (!user) {
-        throw CustomError.badRequest("Wrong credentials");
+        throw CustomError.badRequest("Credenciales erroneas");
       }
 
       if (!user.emailValidated) {
-        throw CustomError.badRequest("Your email hasn't benn validated");
+        throw CustomError.badRequest("Su correo no ha sido validado");
       }
 
       const userValidated = await bcryptAdapter.compare(
@@ -65,7 +65,7 @@ export class AuthServices {
       );
 
       if (!userValidated) {
-        throw CustomError.badRequest("Wrong credentials");
+        throw CustomError.badRequest("Credenciales erroneas");
       }
 
       const token = await JWTadapter.generateJWT({
@@ -73,7 +73,7 @@ export class AuthServices {
         email: user.email,
       });
       if (!token) {
-        throw CustomError.internalServer("Error with token");
+        throw CustomError.internalServer("Token erroneo");
       }
 
       return {
@@ -92,7 +92,7 @@ export class AuthServices {
   private sendEmailValidationLink = async (email: string) => {
     const token = await JWTadapter.generateJWT({ email });
     if (!token) {
-      throw CustomError.internalServer("Error getting token");
+      throw CustomError.internalServer("Error obteniendo el token");
     }
 
     const link = `${envs.WEBSERVICE_URL}/auth/validate-email/${token}`;
@@ -114,7 +114,7 @@ export class AuthServices {
     const isSent = await this.emailService.sendEmail(options);
 
     if (!isSent) {
-      throw CustomError.internalServer("Error sending email");
+      throw CustomError.internalServer("Error al enviar el email");
     }
     return true;
   };
@@ -125,7 +125,7 @@ export class AuthServices {
     try{
     const payload= await JWTadapter.validateJWT(token)
 
-    if(!payload){throw CustomError.unAuthorized("Invalida token")}
+    if(!payload){throw CustomError.unAuthorized("Token invalido")}
 
     const {email}=payload as {email:string};
     if(!email){
@@ -134,7 +134,7 @@ export class AuthServices {
     const user= await UserModel.findOne({email})
 
     if(!user){
-      throw CustomError.internalServer("User is not found");
+      throw CustomError.internalServer("Usuario no encontrado");
     }
 
     user.emailValidated=true;
@@ -149,4 +149,6 @@ export class AuthServices {
   }
 
   }
+
+  
 }

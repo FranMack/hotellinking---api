@@ -93,4 +93,10 @@ export class AuthControllers{
 
 
 }
+
+me=(req: Request, res: Response) =>{
+  
+    res.send(req.body.user);
+
+}
 }

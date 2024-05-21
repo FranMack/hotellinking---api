@@ -1,4 +1,5 @@
 import nodemailer, { Transporter } from "nodemailer";
+import { envs } from "../../config";
 
 export interface SendMailOptions {
   to: string | string[];
@@ -33,6 +34,7 @@ export class EmailService {
 
     try {
       const sentInformation = await this.transporter.sendMail({
+        from: `Hotelinking <${envs.MAILER_EMAIL}>`,
         to: to,
         subject: subject,
         html: htmlBody,

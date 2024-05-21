@@ -15,11 +15,11 @@ export class ProductServices{
            const user= await UserModel.findOne({email:userEmail})
 
             if(!user){
-                throw CustomError.badRequest("User not found")
+                throw CustomError.badRequest("Usuario no encontrado")
             }
 
             if(user?.role[0]!=="ADMIN_ROLE"){
-                throw CustomError.unAuthorized("Only admin are allowed to add new products")
+                throw CustomError.unAuthorized("Solo los usuarios admin pueden cargar nuevos productos")
             }
 
           
@@ -28,7 +28,7 @@ export class ProductServices{
             const product= await ProductModel.findOne({name:createProductDto.name})
 
             if(product){
-                throw CustomError.badRequest("Product already exist")
+                throw CustomError.badRequest("El producto ya se encontraba cargado")
             }
 
             const newProduct=await ProductModel.create({...createProductDto})
@@ -57,4 +57,6 @@ export class ProductServices{
             throw error
         }
     }
+
+  
 }

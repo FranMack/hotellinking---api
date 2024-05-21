@@ -27,6 +27,7 @@ export class ProductRoutes {
   
     router.post('/add',AuthMiddleware.validateJWT, controller.createProduct );
     router.get('/list', controller.listProducts );
+    router.get('/list', controller.listProducts );
 
     router.post('/edit', controller.createProduct );
     router.post('/delete', controller.createProduct );

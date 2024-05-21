@@ -11,10 +11,10 @@ export class UserServices {
       const product = await ProductModel.findById(productId);
       const user = await UserModel.findById(userId);
       if (!product) {
-        throw CustomError.badRequest("Product not found");
+        throw CustomError.badRequest("Producto no encontrado");
       }
       if (!user) {
-        throw CustomError.badRequest("User not found");
+        throw CustomError.badRequest("Usuario no encontrado");
       }
 
       if (
@@ -22,7 +22,7 @@ export class UserServices {
           return product.productId === productId;
         })
       ) {
-        throw CustomError.badRequest("User have already request that discount");
+        throw CustomError.badRequest("El usuario ya ha adquirido ese descuento");
       }
 
       const promotionalCode = Uuid.v4();
@@ -42,10 +42,24 @@ export class UserServices {
     try {
       const user = await UserModel.findById(userId);
       if (!user) {
-        throw CustomError.badRequest("User not found");
+        throw CustomError.badRequest("Usuario no encontrado");
       }
 
-      return user.myDiscounts;
+        const userProductsCupons = await Promise.all(
+          user.myDiscounts.map(async (item) => {
+            const product = await ProductModel.findById(item.productId);
+            return {
+              product,
+              promotionalCode: item.promotionalCode,
+              used:item.used
+
+            };
+          })
+        );
+       
+
+
+      return userProductsCupons
     } catch (error) {
       console.log(error);
       throw error;
@@ -56,23 +70,17 @@ export class UserServices {
     try {
       const user = await UserModel.findById(userId);
       if (!user) {
-        throw CustomError.badRequest("User not found");
+        throw CustomError.badRequest("Usuario no encontrado");
       }
 
-      console.log("xxxxxxxxxxxxxxx", promotionalCode);
-      console.log("yyyyyyyyyyyyyyy", user.myDiscounts[0].promotionalCode);
-
-      console.log(
-        "zzzzzzzzzzzzzzzz",
-        promotionalCode === user.myDiscounts[0].promotionalCode
-      );
+    
 
       if (
         !user.myDiscounts.find((item) => {
           return item.promotionalCode === promotionalCode;
         })
       ) {
-        throw CustomError.badRequest("Wrong promotional code");
+        throw CustomError.badRequest("Codigo promocional erroneo");
       }
 
 
@@ -83,7 +91,7 @@ export class UserServices {
           };
         })
       ) {
-        throw CustomError.badRequest("The promotional code has already been used");
+        throw CustomError.badRequest("El codigo promocional ya ha sido usado");
       }
 
 
